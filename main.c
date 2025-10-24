@@ -46,6 +46,9 @@ void calculateAndDisplayCost(int source, int dest, int weight, int vehicleType);
 void findLeastCostRoute(int source, int dest, int weight, int vehicleType);
 //void saveToFile();
 //void performanceReports();
+void swap(int* a, int* b);
+void permute(int* arr, int start, int end, int allPerms[][10], int* count);
+int factorial(int n);
 
 int main()
 {
@@ -447,6 +450,33 @@ void deliveryRequestHandling()
     findLeastCostRoute(source, dest, weight, vehicleType);
 }
 
+int factorial(int n) {
+    if(n <= 1) return 1;
+    return n * factorial(n-1);
+}
+
+void swap(int* a, int* b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+void permute(int* arr, int start, int end, int allPerms[][10], int* count) {
+    if(start == end) {
+        for(int i = 0; i <= end; i++) {
+            allPerms[*count][i] = arr[i];
+        }
+        (*count)++;
+        return;
+    }
+
+    for(int i = start; i <= end; i++) {
+        swap(&arr[start], &arr[i]);
+        permute(arr, start + 1, end, allPerms, count);
+        swap(&arr[start], &arr[i]);
+    }
+}
+
 void findLeastCostRoute(int source, int dest, int weight, int vehicleType)
 {
     if(distances[source][dest] > 0)
@@ -587,6 +617,7 @@ void findLeastCostRoute(int source, int dest, int weight, int vehicleType)
         deliveryCount++;
     }
 }
+
 void calculateAndDisplayCost(int source, int dest, int weight, int vehicleType)
 {
     int D = distances[source][dest];
@@ -623,7 +654,6 @@ void calculateAndDisplayCost(int source, int dest, int weight, int vehicleType)
     printf("Estimated Time: %.2f hours\n", estimatedTime);
     printf("======================================================\n");
 
-    // Store delivery record
     if(deliveryCount < MAX_DELIVERIES)
     {
         strcpy(deliverySource[deliveryCount], cities[source]);

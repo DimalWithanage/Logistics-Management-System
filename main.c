@@ -17,6 +17,8 @@ void removeCity();
 void renameCity();
 void displayCities();
 void distanceManagement();
+void inputDistance();
+void displayDistanceMatrix();
 //void vehicleManagement();
 //void deliveryRequestHandling();
 //void saveToFile();
@@ -241,7 +243,8 @@ void displayCities()
     printf("========================================\n");
 }
 
-void distanceManagement() {
+void distanceManagement()
+{
     int choice;
     printf("\n");
     printf("========================================\n");
@@ -254,16 +257,61 @@ void distanceManagement() {
     printf("Enter your choice: ");
     scanf("%d", &choice);
 
-    switch(choice) {
-        case 1:
-//            inputDistance();
-            break;
-        case 2:
+    switch(choice)
+    {
+    case 1:
+            inputDistance();
+        break;
+    case 2:
 //            displayDistanceMatrix();
-            break;
-        case 3:
-            break;
-        default:
-            printf("\nInvalid choice!\n");
+        break;
+    case 3:
+        break;
+    default:
+        printf("\nInvalid choice!\n");
     }
+}
+
+void inputDistance()
+{
+    if(cityCount < 2)
+    {
+        printf("\nNeed at least 2 cities to set distances!\n");
+        return;
+    }
+
+    displayCities();
+
+    int city1, city2, dist;
+    printf("\nEnter first city index: ");
+    scanf("%d", &city1);
+    printf("Enter second city index: ");
+    scanf("%d", &city2);
+
+    if(city1 < 0 || city1 >= cityCount || city2 < 0 || city2 >= cityCount)
+    {
+        printf("\nInvalid city index!\n");
+        return;
+    }
+
+    if(city1 == city2)
+    {
+        printf("\nCannot set distance from a city to itself!\n");
+        return;
+    }
+
+    printf("Enter distance (km): ");
+    scanf("%d", &dist);
+
+    if(dist < 0)
+    {
+        printf("\nDistance cannot be negative!\n");
+        return;
+    }
+
+    distances[city1][city2] = dist;
+    distances[city2][city1] = dist;
+
+    printf("\nDistance between '%s' and '%s' set to %d km\n",
+           cities[city1], cities[city2], dist);
 }

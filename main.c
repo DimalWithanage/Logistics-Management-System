@@ -8,12 +8,14 @@
 char cities[MAX_CITIES][MAX_NAME_LENGTH];
 int cityCount = 0;
 
+int distances[MAX_CITIES][MAX_CITIES];
+
 void mainMenu();
 void cityManagement();
 void addCity();
-//void removeCity();
+void removeCity();
 //void renameCity();
-//void displayCities();
+void displayCities();
 //void distanceManagement();
 //void vehicleManagement();
 //void deliveryRequestHandling();
@@ -106,7 +108,7 @@ void cityManagement() {
             addCity();
             break;
         case 2:
-//            removeCity();
+            removeCity();
             break;
         case 3:
 //            renameCity();
@@ -145,4 +147,29 @@ void addCity() {
     printf("\n'%s' added successfully!\n", newCity);
 }
 
+void removeCity() {
+    if(cityCount == 0) {
+        printf("\nNo cities to remove!\n");
+        return;
+    }
+
+    displayCities();
+    printf("\nEnter city index to remove (0-%d): ", cityCount-1);
+    int index;
+    scanf("%d", &index);
+
+    if(index < 0 || index >= cityCount) {
+        printf("\nInvalid city index!\n");
+        return;
+    }
+
+    printf("\nRemoving city '%s'...\n", cities[index]);
+
+    for(int i = index; i < cityCount-1; i++) {
+        strcpy(cities[i], cities[i+1]);
+    }
+
+    cityCount--;
+    printf("\nCity removed successfully!\n");
+}
 

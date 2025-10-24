@@ -195,7 +195,6 @@ void removeCity()
     printf("\nEnter city index to remove (0-%d): ", cityCount-1);
     int index;
     scanf("%d", &index);
-    index--;
 
     if(index < 0 || index >= cityCount)
     {
@@ -210,9 +209,25 @@ void removeCity()
         strcpy(cities[i], cities[i+1]);
     }
 
+    for(int i = index; i < cityCount-1; i++)
+    {
+        for(int j = 0; j < cityCount; j++)
+        {
+            distances[i][j] = distances[i+1][j];
+        }
+    }
+    for(int i = 0; i < cityCount; i++)
+    {
+        for(int j = index; j < cityCount-1; j++)
+        {
+            distances[i][j] = distances[i][j+1];
+        }
+    }
+
     cityCount--;
     printf("\nCity removed successfully!\n");
 }
+
 void renameCity()
 {
     if(cityCount == 0)
@@ -450,27 +465,33 @@ void deliveryRequestHandling()
     findLeastCostRoute(source, dest, weight, vehicleType);
 }
 
-int factorial(int n) {
+int factorial(int n)
+{
     if(n <= 1) return 1;
     return n * factorial(n-1);
 }
 
-void swap(int* a, int* b) {
+void swap(int* a, int* b)
+{
     int temp = *a;
     *a = *b;
     *b = temp;
 }
 
-void permute(int* arr, int start, int end, int allPerms[][10], int* count) {
-    if(start == end) {
-        for(int i = 0; i <= end; i++) {
+void permute(int* arr, int start, int end, int allPerms[][10], int* count)
+{
+    if(start == end)
+    {
+        for(int i = 0; i <= end; i++)
+        {
             allPerms[*count][i] = arr[i];
         }
         (*count)++;
         return;
     }
 
-    for(int i = start; i <= end; i++) {
+    for(int i = start; i <= end; i++)
+    {
         swap(&arr[start], &arr[i]);
         permute(arr, start + 1, end, allPerms, count);
         swap(&arr[start], &arr[i]);

@@ -173,3 +173,17 @@ void removeCity() {
     printf("\nCity removed successfully!\n");
 }
 
+void displayCities() {
+    if(cityCount == 0) {
+        printf("\nNo cities added yet!\n");
+        return;
+    }
+
+    printf("\n========================================\n");
+    printf("          LIST OF CITIES\n");
+    printf("========================================\n");
+    for(int i = 0; i < cityCount; i++) {
+        printf("%2d. %s\n", i, cities[i]);
+    }
+    printf("========================================\n");
+}

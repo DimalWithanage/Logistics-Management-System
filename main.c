@@ -26,7 +26,7 @@ void distanceManagement();
 void inputDistance();
 void displayDistanceMatrix();
 void vehicleManagement();
-//void deliveryRequestHandling();
+void deliveryRequestHandling();
 //void saveToFile();
 //void performanceReports();
 
@@ -52,7 +52,7 @@ int main()
             vehicleManagement();
             break;
         case 4:
-//            deliveryRequestHandling();
+            deliveryRequestHandling();
             break;
         case 5:
 //            performanceReports();
@@ -372,4 +372,58 @@ void vehicleManagement()
                vehicleFuelEfficiency[i]);
     }
     printf("========================================\n");
+}
+
+void deliveryRequestHandling()
+{
+    if(cityCount < 2)
+    {
+        printf("\nNeed at least 2 cities for delivery!\n");
+        return;
+    }
+
+    displayCities();
+
+    int source, dest, weight, vehicleType;
+
+    printf("\nEnter source city index: ");
+    scanf("%d", &source);
+    printf("Enter destination city index: ");
+    scanf("%d", &dest);
+
+    if(source < 0 || source >= cityCount || dest < 0 || dest >= cityCount)
+    {
+        printf("\nInvalid city index!\n");
+        return;
+    }
+
+    if(source == dest)
+    {
+        printf("\nSource and destination cannot be the same!\n");
+        return;
+    }
+
+    printf("Enter weight (kg): ");
+    scanf("%d", &weight);
+
+    printf("\nSelect vehicle type:\n");
+    for(int i = 0; i < 3; i++)
+    {
+        printf("%d. %s (Capacity: %d kg)\n", i+1, vehicleTypes[i], vehicleCapacity[i]);
+    }
+    printf("Enter choice (1-3): ");
+    scanf("%d", &vehicleType);
+
+    if(vehicleType < 1 || vehicleType > 3)
+    {
+        printf("\nInvalid vehicle type!\n");
+        return;
+    }
+
+    vehicleType--;
+    if(weight > vehicleCapacity[vehicleType])
+    {
+        printf("\nWeight exceeds vehicle capacity!\n");
+        return;
+    }
 }

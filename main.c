@@ -16,7 +16,7 @@ void addCity();
 void removeCity();
 void renameCity();
 void displayCities();
-//void distanceManagement();
+void distanceManagement();
 //void vehicleManagement();
 //void deliveryRequestHandling();
 //void saveToFile();
@@ -38,7 +38,7 @@ int main()
             cityManagement();
             break;
         case 2:
-//            distanceManagement();
+            distanceManagement();
             break;
         case 3:
 //            vehicleManagement();
@@ -194,7 +194,7 @@ void renameCity()
     }
 
     displayCities();
-    printf("\nEnter city index to rename (0-%d): ", cityCount-1);
+    printf("\nEnter city index to rename (0-%d): ", cityCount);
     int index;
     scanf("%d", &index);
     getchar();
@@ -239,4 +239,31 @@ void displayCities()
         printf("%2d. %s\n", i+1, cities[i]);
     }
     printf("========================================\n");
+}
+
+void distanceManagement() {
+    int choice;
+    printf("\n");
+    printf("========================================\n");
+    printf("      DISTANCE MANAGEMENT\n");
+    printf("========================================\n");
+    printf("1. Input/Edit Distance\n");
+    printf("2. Display Distance Table\n");
+    printf("3. Back to Main Menu\n");
+    printf("========================================\n");
+    printf("Enter your choice: ");
+    scanf("%d", &choice);
+
+    switch(choice) {
+        case 1:
+//            inputDistance();
+            break;
+        case 2:
+//            displayDistanceMatrix();
+            break;
+        case 3:
+            break;
+        default:
+            printf("\nInvalid choice!\n");
+    }
 }

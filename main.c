@@ -14,7 +14,7 @@ void mainMenu();
 void cityManagement();
 void addCity();
 void removeCity();
-//void renameCity();
+void renameCity();
 void displayCities();
 //void distanceManagement();
 //void vehicleManagement();
@@ -89,7 +89,8 @@ void mainMenu()
     printf("========================================\n");
 }
 
-void cityManagement() {
+void cityManagement()
+{
     int choice;
     printf("\n");
     printf("========================================\n");
@@ -105,30 +106,33 @@ void cityManagement() {
     scanf("%d", &choice);
     getchar();
 
-    switch(choice) {
-        case 1:
-            addCity();
-            break;
-        case 2:
-            removeCity();
-            break;
-        case 3:
-//            renameCity();
-            break;
-        case 4:
-//            displayCities();
-            break;
-        case 5:
-            break;
-        default:
-            printf("\nInvalid choice!\n");
+    switch(choice)
+    {
+    case 1:
+        addCity();
+        break;
+    case 2:
+        removeCity();
+        break;
+    case 3:
+        renameCity();
+        break;
+    case 4:
+        displayCities();
+        break;
+    case 5:
+        break;
+    default:
+        printf("\nInvalid choice!\n");
     }
 }
 
-void addCity() {
+void addCity()
+{
     char newCity[MAX_NAME_LENGTH];
 
-    if(cityCount >= MAX_CITIES) {
+    if(cityCount >= MAX_CITIES)
+    {
         printf("\nMaximum city limit reached!\n");
         return;
     }
@@ -137,8 +141,10 @@ void addCity() {
     fgets(newCity, MAX_NAME_LENGTH, stdin);
     newCity[strcspn(newCity, "\n")] = 0;
 
-    for(int i = 0; i < cityCount; i++) {
-        if(strcasecmp(cities[i], newCity) == 0) {
+    for(int i = 0; i < cityCount; i++)
+    {
+        if(strcasecmp(cities[i], newCity) == 0)
+        {
             printf("\nCity already exists!\n");
             return;
         }
@@ -149,8 +155,10 @@ void addCity() {
     printf("\n'%s' added successfully!\n", newCity);
 }
 
-void removeCity() {
-    if(cityCount == 0) {
+void removeCity()
+{
+    if(cityCount == 0)
+    {
         printf("\nNo cities to remove!\n");
         return;
     }
@@ -160,23 +168,64 @@ void removeCity() {
     int index;
     scanf("%d", &index);
 
-    if(index < 0 || index >= cityCount) {
+    if(index < 0 || index >= cityCount)
+    {
         printf("\nInvalid city index!\n");
         return;
     }
 
     printf("\nRemoving city '%s'...\n", cities[index]);
 
-    for(int i = index; i < cityCount-1; i++) {
+    for(int i = index; i < cityCount-1; i++)
+    {
         strcpy(cities[i], cities[i+1]);
     }
 
     cityCount--;
     printf("\nCity removed successfully!\n");
 }
+void renameCity()
+{
+    if(cityCount == 0)
+    {
+        printf("\nNo cities to rename!\n");
+        return;
+    }
 
-void displayCities() {
-    if(cityCount == 0) {
+    displayCities();
+    printf("\nEnter city index to rename (0-%d): ", cityCount-1);
+    int index;
+    scanf("%d", &index);
+    getchar();
+
+    if(index < 0 || index >= cityCount)
+    {
+        printf("\nInvalid city index!\n");
+        return;
+    }
+
+    char newName[MAX_NAME_LENGTH];
+    printf("Enter new name for '%s': ", cities[index]);
+    fgets(newName, MAX_NAME_LENGTH, stdin);
+    newName[strcspn(newName, "\n")] = 0;
+
+    for(int i = 0; i < cityCount; i++)
+    {
+        if(i != index && strcasecmp(cities[i], newName) == 0)
+        {
+            printf("\nCity name already exists!\n");
+            return;
+        }
+    }
+
+    strcpy(cities[index], newName);
+    printf("\nCity renamed successfully!\n");
+}
+
+void displayCities()
+{
+    if(cityCount == 0)
+    {
         printf("\nNo cities added yet!\n");
         return;
     }
@@ -184,7 +233,8 @@ void displayCities() {
     printf("\n========================================\n");
     printf("          LIST OF CITIES\n");
     printf("========================================\n");
-    for(int i = 0; i < cityCount; i++) {
+    for(int i = 0; i < cityCount; i++)
+    {
         printf("%2d. %s\n", i, cities[i]);
     }
     printf("========================================\n");

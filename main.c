@@ -1,17 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
+#define MAX_CITIES 30
+#define MAX_NAME_LENGTH 50
+
+char cities[MAX_CITIES][MAX_NAME_LENGTH];
+int cityCount = 0;
 
 void mainMenu();
 void cityManagement();
 void addCity();
-void removeCity();
-void renameCity();
-void displayCities();
-void distanceManagement();
-void vehicleManagement();
-void deliveryRequestHandling();
-void saveToFile();
-void performanceReports();
+//void removeCity();
+//void renameCity();
+//void displayCities();
+//void distanceManagement();
+//void vehicleManagement();
+//void deliveryRequestHandling();
+//void saveToFile();
+//void performanceReports();
 
 int main()
 {
@@ -28,23 +35,23 @@ int main()
             cityManagement();
             break;
         case 2:
-            distanceManagement();
+//            distanceManagement();
             break;
         case 3:
-            vehicleManagement();
+//            vehicleManagement();
             break;
         case 4:
-            deliveryRequestHandling();
+//            deliveryRequestHandling();
             break;
         case 5:
-            performanceReports();
+//            performanceReports();
             break;
         case 6:
-            saveToFile();
+//            saveToFile();
             printf("\nData saved successfully!\n");
             break;
         case 7:
-            saveToFile();
+//            saveToFile();
             printf("\nThank you for using the Logistics Management System!\n");
             break;
         default:
@@ -99,13 +106,13 @@ void cityManagement() {
             addCity();
             break;
         case 2:
-            removeCity();
+//            removeCity();
             break;
         case 3:
-            renameCity();
+//            renameCity();
             break;
         case 4:
-            displayCities();
+//            displayCities();
             break;
         case 5:
             break;
@@ -113,4 +120,29 @@ void cityManagement() {
             printf("\nInvalid choice!\n");
     }
 }
+
+void addCity() {
+    char newCity[MAX_NAME_LENGTH];
+
+    if(cityCount >= MAX_CITIES) {
+        printf("\nMaximum city limit reached!\n");
+        return;
+    }
+
+    printf("\nEnter city name: ");
+    fgets(newCity, MAX_NAME_LENGTH, stdin);
+    newCity[strcspn(newCity, "\n")] = 0;
+
+    for(int i = 0; i < cityCount; i++) {
+        if(strcasecmp(cities[i], newCity) == 0) {
+            printf("\nCity already exists!\n");
+            return;
+        }
+    }
+
+    strcpy(cities[cityCount], newCity);
+    cityCount++;
+    printf("\n'%s' added successfully!\n", newCity);
+}
+
 

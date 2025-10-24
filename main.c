@@ -3,6 +3,10 @@
 
 void mainMenu();
 void cityManagement();
+void addCity();
+void removeCity();
+void renameCity();
+void displayCities();
 void distanceManagement();
 void vehicleManagement();
 void deliveryRequestHandling();
@@ -59,7 +63,6 @@ int main()
     return 0;
 }
 
-
 void mainMenu()
 {
     printf("\n");
@@ -75,3 +78,39 @@ void mainMenu()
     printf("7. Exit\n");
     printf("========================================\n");
 }
+
+void cityManagement() {
+    int choice;
+    printf("\n");
+    printf("========================================\n");
+    printf("        CITY MANAGEMENT\n");
+    printf("========================================\n");
+    printf("1. Add City\n");
+    printf("2. Remove City\n");
+    printf("3. Rename City\n");
+    printf("4. Display All Cities\n");
+    printf("5. Back to Main Menu\n");
+    printf("========================================\n");
+    printf("Enter your choice: ");
+    scanf("%d", &choice);
+
+    switch(choice) {
+        case 1:
+            addCity();
+            break;
+        case 2:
+            removeCity();
+            break;
+        case 3:
+            renameCity();
+            break;
+        case 4:
+            displayCities();
+            break;
+        case 5:
+            break;
+        default:
+            printf("\nInvalid choice!\n");
+    }
+}
+

@@ -263,7 +263,7 @@ void distanceManagement()
             inputDistance();
         break;
     case 2:
-//            displayDistanceMatrix();
+            displayDistanceMatrix();
         break;
     case 3:
         break;
@@ -315,3 +315,30 @@ void inputDistance()
     printf("\nDistance between '%s' and '%s' set to %d km\n",
            cities[city1], cities[city2], dist);
 }
+
+void displayDistanceMatrix() {
+    if(cityCount == 0) {
+        printf("\nNo cities added yet!\n");
+        return;
+    }
+
+    printf("\n========================================\n");
+    printf("        DISTANCE TABLE (km)\n");
+    printf("========================================\n");
+
+    printf("%-15s", "");
+    for(int i = 0; i < cityCount; i++) {
+        printf("%-8s", cities[i]);
+    }
+    printf("\n");
+
+    for(int i = 0; i < cityCount; i++) {
+        printf("%-15s", cities[i]);
+        for(int j = 0; j < cityCount; j++) {
+            printf("%-8d", distances[i][j]);
+        }
+        printf("\n");
+    }
+    printf("========================================\n");
+}
+

@@ -30,6 +30,7 @@ int main()
         mainMenu();
         printf("Enter your choice: ");
         scanf("%d", &choice);
+        getchar();
 
         switch(choice)
         {
@@ -102,6 +103,7 @@ void cityManagement() {
     printf("========================================\n");
     printf("Enter your choice: ");
     scanf("%d", &choice);
+    getchar();
 
     switch(choice) {
         case 1:

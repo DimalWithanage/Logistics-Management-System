@@ -10,6 +10,12 @@ int cityCount = 0;
 
 int distances[MAX_CITIES][MAX_CITIES];
 
+char vehicleTypes[3][20] = {"Van", "Truck", "Lorry"};
+int vehicleCapacity[3] = {1000, 5000, 10000};
+int vehicleRatePerKm[3] = {30, 40, 80};
+int vehicleAvgSpeed[3] = {60, 50, 45};
+int vehicleFuelEfficiency[3] = {12, 6, 4};
+
 void mainMenu();
 void cityManagement();
 void addCity();
@@ -19,7 +25,7 @@ void displayCities();
 void distanceManagement();
 void inputDistance();
 void displayDistanceMatrix();
-//void vehicleManagement();
+void vehicleManagement();
 //void deliveryRequestHandling();
 //void saveToFile();
 //void performanceReports();
@@ -43,7 +49,7 @@ int main()
             distanceManagement();
             break;
         case 3:
-//            vehicleManagement();
+            vehicleManagement();
             break;
         case 4:
 //            deliveryRequestHandling();
@@ -260,10 +266,10 @@ void distanceManagement()
     switch(choice)
     {
     case 1:
-            inputDistance();
+        inputDistance();
         break;
     case 2:
-            displayDistanceMatrix();
+        displayDistanceMatrix();
         break;
     case 3:
         break;
@@ -316,8 +322,10 @@ void inputDistance()
            cities[city1], cities[city2], dist);
 }
 
-void displayDistanceMatrix() {
-    if(cityCount == 0) {
+void displayDistanceMatrix()
+{
+    if(cityCount == 0)
+    {
         printf("\nNo cities added yet!\n");
         return;
     }
@@ -327,14 +335,17 @@ void displayDistanceMatrix() {
     printf("========================================\n");
 
     printf("%-15s", "");
-    for(int i = 0; i < cityCount; i++) {
+    for(int i = 0; i < cityCount; i++)
+    {
         printf("%-8s", cities[i]);
     }
     printf("\n");
 
-    for(int i = 0; i < cityCount; i++) {
+    for(int i = 0; i < cityCount; i++)
+    {
         printf("%-15s", cities[i]);
-        for(int j = 0; j < cityCount; j++) {
+        for(int j = 0; j < cityCount; j++)
+        {
             printf("%-8d", distances[i][j]);
         }
         printf("\n");
@@ -342,3 +353,23 @@ void displayDistanceMatrix() {
     printf("========================================\n");
 }
 
+void vehicleManagement()
+{
+    printf("\n========================================\n");
+    printf("      VEHICLE INFORMATION\n");
+    printf("========================================\n");
+    printf("%-5s %-10s %-12s %-12s %-12s %-15s\n",
+           "No.", "Type", "Capacity", "Rate/km", "Speed", "Fuel Eff.");
+    printf("%-5s %-10s %-12s %-12s %-12s %-15s\n",
+           "", "", "(kg)", "(LKR)", "(km/h)", "(km/l)");
+    printf("----------------------------------------\n");
+
+    for(int i = 0; i < 3; i++)
+    {
+        printf("%-5d %-10s %-12d %-12d %-12d %-15d\n",
+               i+1, vehicleTypes[i], vehicleCapacity[i],
+               vehicleRatePerKm[i], vehicleAvgSpeed[i],
+               vehicleFuelEfficiency[i]);
+    }
+    printf("========================================\n");
+}

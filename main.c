@@ -4,6 +4,8 @@
 
 #define MAX_CITIES 30
 #define MAX_NAME_LENGTH 50
+#define MAX_DELIVERIES 50
+#define FUEL_PRICE 310.0
 
 char cities[MAX_CITIES][MAX_NAME_LENGTH];
 int cityCount = 0;
@@ -16,6 +18,19 @@ int vehicleRatePerKm[3] = {30, 40, 80};
 int vehicleAvgSpeed[3] = {60, 50, 45};
 int vehicleFuelEfficiency[3] = {12, 6, 4};
 
+char deliverySource[MAX_DELIVERIES][MAX_NAME_LENGTH];
+char deliveryDest[MAX_DELIVERIES][MAX_NAME_LENGTH];
+int deliveryDistance[MAX_DELIVERIES];
+int deliveryWeight[MAX_DELIVERIES];
+int deliveryVehicleType[MAX_DELIVERIES]; // 0=Van, 1=Truck, 2=Lorry
+float deliveryBaseCost[MAX_DELIVERIES];
+float deliveryFuelCost[MAX_DELIVERIES];
+float deliveryTotalCost[MAX_DELIVERIES];
+float deliveryProfit[MAX_DELIVERIES];
+float deliveryCustomerCharge[MAX_DELIVERIES];
+float deliveryEstimatedTime[MAX_DELIVERIES];
+int deliveryCount = 0;
+
 void mainMenu();
 void cityManagement();
 void addCity();
@@ -27,6 +42,8 @@ void inputDistance();
 void displayDistanceMatrix();
 void vehicleManagement();
 void deliveryRequestHandling();
+void calculateAndDisplayCost(int source, int dest, int weight, int vehicleType);
+void findLeastCostRoute(int source, int dest, int weight, int vehicleType);
 //void saveToFile();
 //void performanceReports();
 
@@ -175,7 +192,7 @@ void removeCity()
     printf("\nEnter city index to remove (0-%d): ", cityCount-1);
     int index;
     scanf("%d", &index);
-    index -= 1;
+    index--;
 
     if(index < 0 || index >= cityCount)
     {
@@ -425,5 +442,148 @@ void deliveryRequestHandling()
     {
         printf("\nWeight exceeds vehicle capacity!\n");
         return;
+    }
+
+    findLeastCostRoute(source, dest, weight, vehicleType);
+}
+
+void findLeastCostRoute(int source, int dest, int weight, int vehicleType)
+{
+    if(distances[source][dest] > 0)
+    {
+        calculateAndDisplayCost(source, dest, weight, vehicleType);
+        return;
+    }
+
+    int intermediateCities[MAX_CITIES];
+    int intermediateCount = 0;
+
+    for(int i = 0; i < cityCount; i++)
+    {
+        if(i != source && i != dest)
+        {
+            if(distances[source][i] > 0 && distances[i][dest] > 0)
+            {
+                intermediateCities[intermediateCount++] = i;
+            }
+        }
+    }
+
+    if(intermediateCount == 0)
+    {
+        printf("\nNo route available between selected cities!\n");
+        return;
+    }
+
+    if(intermediateCount > 4)
+    {
+        intermediateCount = 4;
+    }
+
+    int minDistance = 999999;
+    int bestRoute[10];
+    int bestRouteLength = 0;
+
+    int permCount = factorial(intermediateCount);
+    int allPerms[120][10]; // Max 5! = 120 permutations
+
+    int count = 0;
+    permute(intermediateCities, 0, intermediateCount - 1, allPerms, &count);
+
+    for(int p = 0; p < permCount; p++)
+    {
+        int totalDist = 0;
+        int valid = 1;
+
+        totalDist += distances[source][allPerms[p][0]];
+
+        for(int i = 0; i < intermediateCount - 1; i++)
+        {
+            if(distances[allPerms[p][i]][allPerms[p][i+1]] == 0)
+            {
+                valid = 0;
+                break;
+            }
+            totalDist += distances[allPerms[p][i]][allPerms[p][i+1]];
+        }
+
+        totalDist += distances[allPerms[p][intermediateCount-1]][dest];
+
+        if(valid && totalDist < minDistance)
+        {
+            minDistance = totalDist;
+            bestRoute[0] = source;
+            for(int i = 0; i < intermediateCount; i++)
+            {
+                bestRoute[i+1] = allPerms[p][i];
+            }
+            bestRoute[intermediateCount + 1] = dest;
+            bestRouteLength = intermediateCount + 2;
+        }
+    }
+
+
+    if(minDistance == 999999)
+    {
+        printf("\nNo valid route found!\n");
+        return;
+    }
+
+
+    int D = minDistance;
+    int W = weight;
+    int R = vehicleRatePerKm[vehicleType];
+    int S = vehicleAvgSpeed[vehicleType];
+    int E = vehicleFuelEfficiency[vehicleType];
+    float F = FUEL_PRICE;
+
+    float baseCost = D * R * (1 + W * 1.0 / 10000);
+    float fuelUsed = (float)D / E;
+    float fuelCost = fuelUsed * F;
+    float totalCost = baseCost + fuelCost;
+    float profit = baseCost * 0.25;
+    float customerCharge = totalCost + profit;
+    float estimatedTime = (float)D / S;
+
+    printf("\n======================================================\n");
+    printf("           DELIVERY COST ESTIMATION\n");
+    printf("------------------------------------------------------\n");
+    printf("From: %s\n", cities[source]);
+    printf("To: %s\n", cities[dest]);
+    printf("Route: ");
+    for(int i = 0; i < bestRouteLength; i++)
+    {
+        printf("%s", cities[bestRoute[i]]);
+        if(i < bestRouteLength - 1) printf(" -> ");
+    }
+    printf("\n");
+    printf("Minimum Distance: %d km\n", D);
+    printf("Vehicle: %s\n", vehicleTypes[vehicleType]);
+    printf("Weight: %d kg\n", W);
+    printf("------------------------------------------------------\n");
+    printf("Base Cost: %d × %d × (1 + %d/10000) = %.2f LKR\n",
+           D, R, W, baseCost);
+    printf("Fuel Used: %.2f L\n", fuelUsed);
+    printf("Fuel Cost: %.2f LKR\n", fuelCost);
+    printf("Operational Cost: %.2f LKR\n", totalCost);
+    printf("Profit: %.2f LKR\n", profit);
+    printf("Customer Charge: %.2f LKR\n", customerCharge);
+    printf("Estimated Time: %.2f hours\n", estimatedTime);
+    printf("======================================================\n");
+
+    if(deliveryCount < MAX_DELIVERIES)
+    {
+        strcpy(deliverySource[deliveryCount], cities[source]);
+        strcpy(deliveryDest[deliveryCount], cities[dest]);
+        deliveryDistance[deliveryCount] = D;
+        deliveryWeight[deliveryCount] = W;
+        deliveryVehicleType[deliveryCount] = vehicleType;
+        deliveryBaseCost[deliveryCount] = baseCost;
+        deliveryFuelCost[deliveryCount] = fuelCost;
+        deliveryTotalCost[deliveryCount] = totalCost;
+        deliveryProfit[deliveryCount] = profit;
+        deliveryCustomerCharge[deliveryCount] = customerCharge;
+        deliveryEstimatedTime[deliveryCount] = estimatedTime;
+        deliveryCount++;
     }
 }

@@ -587,3 +587,56 @@ void findLeastCostRoute(int source, int dest, int weight, int vehicleType)
         deliveryCount++;
     }
 }
+void calculateAndDisplayCost(int source, int dest, int weight, int vehicleType)
+{
+    int D = distances[source][dest];
+    int W = weight;
+    int R = vehicleRatePerKm[vehicleType];
+    int S = vehicleAvgSpeed[vehicleType];
+    int E = vehicleFuelEfficiency[vehicleType];
+    float F = FUEL_PRICE;
+
+    float baseCost = D * R * (1 + W * 1.0 / 10000);
+    float fuelUsed = (float)D / E;
+    float fuelCost = fuelUsed * F;
+    float totalCost = baseCost + fuelCost;
+    float profit = baseCost * 0.25;
+    float customerCharge = totalCost + profit;
+    float estimatedTime = (float)D / S;
+
+    printf("\n======================================================\n");
+    printf("           DELIVERY COST ESTIMATION\n");
+    printf("------------------------------------------------------\n");
+    printf("From: %s\n", cities[source]);
+    printf("To: %s\n", cities[dest]);
+    printf("Minimum Distance: %d km\n", D);
+    printf("Vehicle: %s\n", vehicleTypes[vehicleType]);
+    printf("Weight: %d kg\n", W);
+    printf("------------------------------------------------------\n");
+    printf("Base Cost: %d × %d × (1 + %d/10000) = %.2f LKR\n",
+           D, R, W, baseCost);
+    printf("Fuel Used: %.2f L\n", fuelUsed);
+    printf("Fuel Cost: %.2f LKR\n", fuelCost);
+    printf("Operational Cost: %.2f LKR\n", totalCost);
+    printf("Profit: %.2f LKR\n", profit);
+    printf("Customer Charge: %.2f LKR\n", customerCharge);
+    printf("Estimated Time: %.2f hours\n", estimatedTime);
+    printf("======================================================\n");
+
+    // Store delivery record
+    if(deliveryCount < MAX_DELIVERIES)
+    {
+        strcpy(deliverySource[deliveryCount], cities[source]);
+        strcpy(deliveryDest[deliveryCount], cities[dest]);
+        deliveryDistance[deliveryCount] = D;
+        deliveryWeight[deliveryCount] = W;
+        deliveryVehicleType[deliveryCount] = vehicleType;
+        deliveryBaseCost[deliveryCount] = baseCost;
+        deliveryFuelCost[deliveryCount] = fuelCost;
+        deliveryTotalCost[deliveryCount] = totalCost;
+        deliveryProfit[deliveryCount] = profit;
+        deliveryCustomerCharge[deliveryCount] = customerCharge;
+        deliveryEstimatedTime[deliveryCount] = estimatedTime;
+        deliveryCount++;
+    }
+}

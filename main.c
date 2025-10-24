@@ -167,6 +167,7 @@ void removeCity()
     printf("\nEnter city index to remove (0-%d): ", cityCount-1);
     int index;
     scanf("%d", &index);
+    index -= 1;
 
     if(index < 0 || index >= cityCount)
     {
@@ -235,7 +236,7 @@ void displayCities()
     printf("========================================\n");
     for(int i = 0; i < cityCount; i++)
     {
-        printf("%2d. %s\n", i, cities[i]);
+        printf("%2d. %s\n", i+1, cities[i]);
     }
     printf("========================================\n");
 }

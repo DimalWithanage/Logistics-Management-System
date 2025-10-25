@@ -121,40 +121,49 @@ void mainMenu()
 void cityManagement()
 {
     int choice;
-    system("cls");
-    printf("\n");
-    printf("========================================\n");
-    printf("        CITY MANAGEMENT\n");
-    printf("========================================\n");
-    printf("1. Add City\n");
-    printf("2. Remove City\n");
-    printf("3. Rename City\n");
-    printf("4. Display All Cities\n");
-    printf("5. Back to Main Menu\n");
-    printf("========================================\n");
-    printf("Enter your choice: ");
-    scanf("%d", &choice);
-    getchar();
-
-    switch(choice)
+    do
     {
-    case 1:
-        addCity();
-        break;
-    case 2:
-        removeCity();
-        break;
-    case 3:
-        renameCity();
-        break;
-    case 4:
-        displayCities();
-        break;
-    case 5:
-        break;
-    default:
-        printf("\nInvalid choice!\n");
+        system("cls");
+        printf("\n");
+        printf("========================================\n");
+        printf("        CITY MANAGEMENT\n");
+        printf("========================================\n");
+        printf("1. Add City\n");
+        printf("2. Remove City\n");
+        printf("3. Rename City\n");
+        printf("4. Display All Cities\n");
+        printf("5. Back to Main Menu\n");
+        printf("========================================\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+        getchar();
+
+        switch(choice)
+        {
+        case 1:
+            addCity();
+            break;
+        case 2:
+            removeCity();
+            break;
+        case 3:
+            renameCity();
+            break;
+        case 4:
+            displayCities();
+            break;
+        case 5:
+            break;
+        default:
+            printf("\nInvalid choice!\n");
+        }
+        if(choice != 5)
+        {
+            printf("\nPress Enter to continue...");
+            getchar();
+        }
     }
+    while(choice != 5);
 }
 
 void addCity()
@@ -293,32 +302,41 @@ void displayCities()
 void distanceManagement()
 {
     int choice;
-    system("cls");
-    printf("\n");
-    printf("========================================\n");
-    printf("      DISTANCE MANAGEMENT\n");
-    printf("========================================\n");
-    printf("1. Input/Edit Distance\n");
-    printf("2. Display Distance Table\n");
-    printf("3. Back to Main Menu\n");
-    printf("========================================\n");
-    printf("Enter your choice: ");
-    scanf("%d", &choice);
-    getchar();
-
-    switch(choice)
+    do
     {
-    case 1:
-        inputDistance();
-        break;
-    case 2:
-        displayDistanceMatrix();
-        break;
-    case 3:
-        break;
-    default:
-        printf("\nInvalid choice!\n");
+        system("cls");
+        printf("\n");
+        printf("========================================\n");
+        printf("      DISTANCE MANAGEMENT\n");
+        printf("========================================\n");
+        printf("1. Input/Edit Distance\n");
+        printf("2. Display Distance Table\n");
+        printf("3. Back to Main Menu\n");
+        printf("========================================\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+        getchar();
+
+        switch(choice)
+        {
+        case 1:
+            inputDistance();
+            break;
+        case 2:
+            displayDistanceMatrix();
+            break;
+        case 3:
+            break;
+        default:
+            printf("\nInvalid choice!\n");
+        }
+        if(choice != 3)
+        {
+            printf("\nPress Enter to continue...");
+            getchar();
+        }
     }
+    while(choice != 3);
 }
 
 void inputDistance()
@@ -403,14 +421,14 @@ void displayDistanceMatrix()
 void vehicleManagement()
 {
     system("cls");
-    printf("\n===================================================================\n");
-    printf("      VEHICLE INFORMATION\n");
-    printf("===================================================================\n");
+    printf("\n=================================================================\n");
+    printf("                      VEHICLE INFORMATION\n");
+    printf("=================================================================\n");
     printf("%-5s %-10s %-12s %-12s %-12s %-15s\n",
            "No.", "Type", "Capacity", "Rate/km", "Speed", "Fuel Eff.");
     printf("%-5s %-10s %-12s %-12s %-12s %-15s\n",
            "", "", "(kg)", "(LKR)", "(km/h)", "(km/l)");
-    printf("------------------------------------------------------------------\n");
+    printf("-----------------------------------------------------------------\n");
 
     for(int i = 0; i < 3; i++)
     {
@@ -419,7 +437,7 @@ void vehicleManagement()
                vehicleRatePerKm[i], vehicleAvgSpeed[i],
                vehicleFuelEfficiency[i]);
     }
-    printf("====================================================================\n");
+    printf("=================================================================\n");
 }
 
 void deliveryRequestHandling()

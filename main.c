@@ -103,6 +103,7 @@ int main()
 
 void mainMenu()
 {
+    system("cls");
     printf("\n");
     printf("========================================\n");
     printf("   LOGISTICS MANAGEMENT SYSTEM\n");
@@ -120,6 +121,7 @@ void mainMenu()
 void cityManagement()
 {
     int choice;
+    system("cls");
     printf("\n");
     printf("========================================\n");
     printf("        CITY MANAGEMENT\n");
@@ -192,9 +194,11 @@ void removeCity()
     }
 
     displayCities();
-    printf("\nEnter city index to remove (0-%d): ", cityCount-1);
+    printf("\nEnter city index to remove (1-%d): ", cityCount);
     int index;
     scanf("%d", &index);
+    getchar();
+    index--;
 
     if(index < 0 || index >= cityCount)
     {
@@ -237,10 +241,11 @@ void renameCity()
     }
 
     displayCities();
-    printf("\nEnter city index to rename (0-%d): ", cityCount);
+    printf("\nEnter city index to rename (1-%d): ", cityCount);
     int index;
     scanf("%d", &index);
     getchar();
+    index--;
 
     if(index < 0 || index >= cityCount)
     {
@@ -274,6 +279,7 @@ void displayCities()
         return;
     }
 
+    system("cls");
     printf("\n========================================\n");
     printf("          LIST OF CITIES\n");
     printf("========================================\n");
@@ -287,6 +293,7 @@ void displayCities()
 void distanceManagement()
 {
     int choice;
+    system("cls");
     printf("\n");
     printf("========================================\n");
     printf("      DISTANCE MANAGEMENT\n");
@@ -297,6 +304,7 @@ void distanceManagement()
     printf("========================================\n");
     printf("Enter your choice: ");
     scanf("%d", &choice);
+    getchar();
 
     switch(choice)
     {
@@ -326,8 +334,10 @@ void inputDistance()
     int city1, city2, dist;
     printf("\nEnter first city index: ");
     scanf("%d", &city1);
+    getchar();
     printf("Enter second city index: ");
     scanf("%d", &city2);
+    getchar();
 
     if(city1 < 0 || city1 >= cityCount || city2 < 0 || city2 >= cityCount)
     {
@@ -343,6 +353,7 @@ void inputDistance()
 
     printf("Enter distance (km): ");
     scanf("%d", &dist);
+    getchar();
 
     if(dist < 0)
     {
@@ -365,6 +376,7 @@ void displayDistanceMatrix()
         return;
     }
 
+    system("cls");
     printf("\n========================================\n");
     printf("        DISTANCE TABLE (km)\n");
     printf("========================================\n");
@@ -390,14 +402,15 @@ void displayDistanceMatrix()
 
 void vehicleManagement()
 {
-    printf("\n========================================\n");
+    system("cls");
+    printf("\n===================================================================\n");
     printf("      VEHICLE INFORMATION\n");
-    printf("========================================\n");
+    printf("===================================================================\n");
     printf("%-5s %-10s %-12s %-12s %-12s %-15s\n",
            "No.", "Type", "Capacity", "Rate/km", "Speed", "Fuel Eff.");
     printf("%-5s %-10s %-12s %-12s %-12s %-15s\n",
            "", "", "(kg)", "(LKR)", "(km/h)", "(km/l)");
-    printf("----------------------------------------\n");
+    printf("------------------------------------------------------------------\n");
 
     for(int i = 0; i < 3; i++)
     {
@@ -406,7 +419,7 @@ void vehicleManagement()
                vehicleRatePerKm[i], vehicleAvgSpeed[i],
                vehicleFuelEfficiency[i]);
     }
-    printf("========================================\n");
+    printf("====================================================================\n");
 }
 
 void deliveryRequestHandling()
@@ -423,8 +436,10 @@ void deliveryRequestHandling()
 
     printf("\nEnter source city index: ");
     scanf("%d", &source);
+    getchar();
     printf("Enter destination city index: ");
     scanf("%d", &dest);
+    getchar();
 
     if(source < 0 || source >= cityCount || dest < 0 || dest >= cityCount)
     {
@@ -440,6 +455,7 @@ void deliveryRequestHandling()
 
     printf("Enter weight (kg): ");
     scanf("%d", &weight);
+    getchar();
 
     printf("\nSelect vehicle type:\n");
     for(int i = 0; i < 3; i++)
@@ -448,6 +464,7 @@ void deliveryRequestHandling()
     }
     printf("Enter choice (1-3): ");
     scanf("%d", &vehicleType);
+    getchar();
 
     if(vehicleType < 1 || vehicleType > 3)
     {

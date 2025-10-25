@@ -48,9 +48,6 @@ void findLeastCostRoute(int source, int dest, int weight, int vehicleType);
 //void performanceReports();
 void saveToFile();
 void loadFromFile();
-void swap(int* a, int* b);
-void permute(int* arr, int start, int end, int allPerms[][10], int* count);
-int factorial(int n);
 
 int main()
 {
@@ -527,45 +524,18 @@ void deliveryRequestHandling()
     findLeastCostRoute(source, dest, weight, vehicleType);
 }
 
-int factorial(int n)
-{
-    if(n <= 1) return 1;
-    return n * factorial(n-1);
-}
-
-void swap(int* a, int* b)
-{
-    int temp = *a;
-    *a = *b;
-    *b = temp;
-}
-
-void permute(int* arr, int start, int end, int allPerms[][10], int* count)
-{
-    if(start == end)
-    {
-        for(int i = 0; i <= end; i++)
-        {
-            allPerms[*count][i] = arr[i];
-        }
-        (*count)++;
-        return;
-    }
-
-    for(int i = start; i <= end; i++)
-    {
-        swap(&arr[start], &arr[i]);
-        permute(arr, start + 1, end, allPerms, count);
-        swap(&arr[start], &arr[i]);
-    }
-}
-
 void findLeastCostRoute(int source, int dest, int weight, int vehicleType)
 {
+    int minDistance = 999999;
+    int bestRoute[10];
+    int bestRouteLength = 0;
+
     if(distances[source][dest] > 0)
     {
-        calculateAndDisplayCost(source, dest, weight, vehicleType);
-        return;
+        minDistance = distances[source][dest];
+        bestRoute[0] = source;
+        bestRoute[1] = dest;
+        bestRouteLength = 2;
     }
 
     int intermediateCities[MAX_CITIES];
@@ -575,17 +545,22 @@ void findLeastCostRoute(int source, int dest, int weight, int vehicleType)
     {
         if(i != source && i != dest)
         {
-            if(distances[source][i] > 0 && distances[i][dest] > 0)
-            {
-                intermediateCities[intermediateCount++] = i;
-            }
+            intermediateCities[intermediateCount++] = i;
         }
     }
 
     if(intermediateCount == 0)
     {
-        printf("\nNo route available between selected cities!\n");
-        return;
+        if(minDistance < 999999)
+        {
+            calculateAndDisplayCost(source, dest, weight, vehicleType);
+            return;
+        }
+        else
+        {
+            printf("\nNo route available between selected cities!\n");
+            return;
+        }
     }
 
     if(intermediateCount > 4)
@@ -593,55 +568,146 @@ void findLeastCostRoute(int source, int dest, int weight, int vehicleType)
         intermediateCount = 4;
     }
 
-    int minDistance = 999999;
-    int bestRoute[10];
-    int bestRouteLength = 0;
-
-    int permCount = factorial(intermediateCount);
-    int allPerms[120][10]; // Max 5! = 120 permutations
-
-    int count = 0;
-    permute(intermediateCities, 0, intermediateCount - 1, allPerms, &count);
-
-    for(int p = 0; p < permCount; p++)
+    for(int i = 0; i < intermediateCount; i++)
     {
-        int totalDist = 0;
-        int valid = 1;
-
-        totalDist += distances[source][allPerms[p][0]];
-
-        for(int i = 0; i < intermediateCount - 1; i++)
+        int mid = intermediateCities[i];
+        if(distances[source][mid] > 0 && distances[mid][dest] > 0)
         {
-            if(distances[allPerms[p][i]][allPerms[p][i+1]] == 0)
+            int totalDist = distances[source][mid] + distances[mid][dest];
+            if(totalDist < minDistance)
             {
-                valid = 0;
-                break;
+                minDistance = totalDist;
+                bestRoute[0] = source;
+                bestRoute[1] = mid;
+                bestRoute[2] = dest;
+                bestRouteLength = 3;
             }
-            totalDist += distances[allPerms[p][i]][allPerms[p][i+1]];
-        }
-
-        totalDist += distances[allPerms[p][intermediateCount-1]][dest];
-
-        if(valid && totalDist < minDistance)
-        {
-            minDistance = totalDist;
-            bestRoute[0] = source;
-            for(int i = 0; i < intermediateCount; i++)
-            {
-                bestRoute[i+1] = allPerms[p][i];
-            }
-            bestRoute[intermediateCount + 1] = dest;
-            bestRouteLength = intermediateCount + 2;
         }
     }
 
+    if(intermediateCount >= 2)
+    {
+        for(int i = 0; i < intermediateCount; i++)
+        {
+            for(int j = 0; j < intermediateCount; j++)
+            {
+                if(i != j)
+                {
+                    int mid1 = intermediateCities[i];
+                    int mid2 = intermediateCities[j];
+                    if(distances[source][mid1] > 0 &&
+                            distances[mid1][mid2] > 0 &&
+                            distances[mid2][dest] > 0)
+                    {
+                        int totalDist = distances[source][mid1] +
+                                        distances[mid1][mid2] +
+                                        distances[mid2][dest];
+                        if(totalDist < minDistance)
+                        {
+                            minDistance = totalDist;
+                            bestRoute[0] = source;
+                            bestRoute[1] = mid1;
+                            bestRoute[2] = mid2;
+                            bestRoute[3] = dest;
+                            bestRouteLength = 4;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if(intermediateCount >= 3)
+    {
+        for(int i = 0; i < intermediateCount; i++)
+        {
+            for(int j = 0; j < intermediateCount; j++)
+            {
+                for(int k = 0; k < intermediateCount; k++)
+                {
+                    if(i != j && j != k && i != k)
+                    {
+                        int mid1 = intermediateCities[i];
+                        int mid2 = intermediateCities[j];
+                        int mid3 = intermediateCities[k];
+                        if(distances[source][mid1] > 0 &&
+                                distances[mid1][mid2] > 0 &&
+                                distances[mid2][mid3] > 0 &&
+                                distances[mid3][dest] > 0)
+                        {
+                            int totalDist = distances[source][mid1] +
+                                            distances[mid1][mid2] +
+                                            distances[mid2][mid3] +
+                                            distances[mid3][dest];
+                            if(totalDist < minDistance)
+                            {
+                                minDistance = totalDist;
+                                bestRoute[0] = source;
+                                bestRoute[1] = mid1;
+                                bestRoute[2] = mid2;
+                                bestRoute[3] = mid3;
+                                bestRoute[4] = dest;
+                                bestRouteLength = 5;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if(intermediateCount >= 4)
+    {
+        for(int i = 0; i < intermediateCount; i++)
+        {
+            for(int j = 0; j < intermediateCount; j++)
+            {
+                for(int k = 0; k < intermediateCount; k++)
+                {
+                    for(int m = 0; m < intermediateCount; m++)
+                    {
+                        if(i != j && i != k && i != m &&
+                                j != k && j != m && k != m)
+                        {
+                            int mid1 = intermediateCities[i];
+                            int mid2 = intermediateCities[j];
+                            int mid3 = intermediateCities[k];
+                            int mid4 = intermediateCities[m];
+                            if(distances[source][mid1] > 0 &&
+                                    distances[mid1][mid2] > 0 &&
+                                    distances[mid2][mid3] > 0 &&
+                                    distances[mid3][mid4] > 0 &&
+                                    distances[mid4][dest] > 0)
+                            {
+                                int totalDist = distances[source][mid1] +
+                                                distances[mid1][mid2] +
+                                                distances[mid2][mid3] +
+                                                distances[mid3][mid4] +
+                                                distances[mid4][dest];
+                                if(totalDist < minDistance)
+                                {
+                                    minDistance = totalDist;
+                                    bestRoute[0] = source;
+                                    bestRoute[1] = mid1;
+                                    bestRoute[2] = mid2;
+                                    bestRoute[3] = mid3;
+                                    bestRoute[4] = mid4;
+                                    bestRoute[5] = dest;
+                                    bestRouteLength = 6;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     if(minDistance == 999999)
     {
-        printf("\nNo valid route found!\n");
+        printf("\nNo valid route found between selected cities!\n");
         return;
     }
-
 
     int D = minDistance;
     int W = weight;

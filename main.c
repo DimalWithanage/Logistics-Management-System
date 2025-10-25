@@ -54,7 +54,9 @@ int factorial(int n);
 
 int main()
 {
+    initializeSystem();
     loadFromFile();
+
     int choice;
     do
     {
@@ -102,6 +104,22 @@ int main()
     while(choice != 7);
 
     return 0;
+}
+
+void initializeSystem()
+{
+    for(int i = 0; i < MAX_CITIES; i++)
+    {
+        for(int j = 0; j < MAX_CITIES; j++)
+        {
+            distances[i][j] = 0;
+        }
+    }
+
+    for(int i = 0; i < MAX_CITIES; i++)
+    {
+        strcpy(cities[i], "");
+    }
 }
 
 void mainMenu()

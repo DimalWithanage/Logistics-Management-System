@@ -45,7 +45,7 @@ void vehicleManagement();
 void deliveryRequestHandling();
 void calculateAndDisplayCost(int source, int dest, int weight, int vehicleType);
 void findLeastCostRoute(int source, int dest, int weight, int vehicleType);
-//void performanceReports();
+void performanceReports();
 void saveToFile();
 void loadFromFile();
 
@@ -77,7 +77,7 @@ int main()
             deliveryRequestHandling();
             break;
         case 5:
-//            performanceReports();
+            performanceReports();
             break;
         case 6:
             saveToFile();
@@ -818,6 +818,53 @@ void calculateAndDisplayCost(int source, int dest, int weight, int vehicleType)
         deliveryEstimatedTime[deliveryCount] = estimatedTime;
         deliveryCount++;
     }
+}
+
+void performanceReports()
+{
+    if(deliveryCount == 0)
+    {
+        printf("\nNo deliveries completed yet!\n");
+        return;
+    }
+
+    int totalDistance = 0;
+    float totalTime = 0;
+    float totalRevenue = 0;
+    float totalProfit = 0;
+    int longestRoute = 0;
+    int shortestRoute = 999999;
+
+    for(int i = 0; i < deliveryCount; i++)
+    {
+        totalDistance += deliveryDistance[i];
+        totalTime += deliveryEstimatedTime[i];
+        totalRevenue += deliveryCustomerCharge[i];
+        totalProfit += deliveryProfit[i];
+
+        if(deliveryDistance[i] > longestRoute)
+        {
+            longestRoute = deliveryDistance[i];
+        }
+        if(deliveryDistance[i] < shortestRoute)
+        {
+            shortestRoute = deliveryDistance[i];
+        }
+    }
+
+    float avgTime = totalTime / deliveryCount;
+
+    printf("\n======================================================\n");
+    printf("           PERFORMANCE REPORT\n");
+    printf("======================================================\n");
+    printf("Total Deliveries Completed: %d\n", deliveryCount);
+    printf("Total Distance Covered: %d km\n", totalDistance);
+    printf("Average Delivery Time: %.2f hours\n", avgTime);
+    printf("Total Revenue: %.2f LKR\n", totalRevenue);
+    printf("Total Profit: %.2f LKR\n", totalProfit);
+    printf("Longest Route: %d km\n", longestRoute);
+    printf("Shortest Route: %d km\n", shortestRoute);
+    printf("======================================================\n");
 }
 
 void saveToFile()

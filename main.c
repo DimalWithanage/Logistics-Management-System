@@ -31,6 +31,7 @@ float deliveryCustomerCharge[MAX_DELIVERIES];
 float deliveryEstimatedTime[MAX_DELIVERIES];
 int deliveryCount = 0;
 
+void initializeSystem();
 void mainMenu();
 void cityManagement();
 void addCity();
@@ -44,14 +45,16 @@ void vehicleManagement();
 void deliveryRequestHandling();
 void calculateAndDisplayCost(int source, int dest, int weight, int vehicleType);
 void findLeastCostRoute(int source, int dest, int weight, int vehicleType);
-//void saveToFile();
 //void performanceReports();
+void saveToFile();
+void loadFromFile();
 void swap(int* a, int* b);
 void permute(int* arr, int start, int end, int allPerms[][10], int* count);
 int factorial(int n);
 
 int main()
 {
+    loadFromFile();
     int choice;
     do
     {
@@ -78,11 +81,11 @@ int main()
 //            performanceReports();
             break;
         case 6:
-//            saveToFile();
+            saveToFile();
             printf("\nData saved successfully!\n");
             break;
         case 7:
-//            saveToFile();
+            saveToFile();
             printf("\nThank you for using the Logistics Management System!\n");
             break;
         default:
@@ -353,9 +356,12 @@ void inputDistance()
     printf("\nEnter first city index: ");
     scanf("%d", &city1);
     getchar();
+    city1--;
+
     printf("Enter second city index: ");
     scanf("%d", &city2);
     getchar();
+    city2--;
 
     if(city1 < 0 || city1 >= cityCount || city2 < 0 || city2 >= cityCount)
     {
@@ -454,9 +460,12 @@ void deliveryRequestHandling()
 
     printf("\nEnter source city index: ");
     scanf("%d", &source);
+    source--;
     getchar();
+
     printf("Enter destination city index: ");
     scanf("%d", &dest);
+    dest--;
     getchar();
 
     if(source < 0 || source >= cityCount || dest < 0 || dest >= cityCount)
@@ -647,7 +656,7 @@ void findLeastCostRoute(int source, int dest, int weight, int vehicleType)
     printf("Vehicle: %s\n", vehicleTypes[vehicleType]);
     printf("Weight: %d kg\n", W);
     printf("------------------------------------------------------\n");
-    printf("Base Cost: %d × %d × (1 + %d/10000) = %.2f LKR\n",
+    printf("Base Cost: %d * %d * (1 + %d/10000) = %.2f LKR\n",
            D, R, W, baseCost);
     printf("Fuel Used: %.2f L\n", fuelUsed);
     printf("Fuel Cost: %.2f LKR\n", fuelCost);
@@ -700,7 +709,7 @@ void calculateAndDisplayCost(int source, int dest, int weight, int vehicleType)
     printf("Vehicle: %s\n", vehicleTypes[vehicleType]);
     printf("Weight: %d kg\n", W);
     printf("------------------------------------------------------\n");
-    printf("Base Cost: %d × %d × (1 + %d/10000) = %.2f LKR\n",
+    printf("Base Cost: %d * %d * (1 + %d/10000) = %.2f LKR\n",
            D, R, W, baseCost);
     printf("Fuel Used: %.2f L\n", fuelUsed);
     printf("Fuel Cost: %.2f LKR\n", fuelCost);
@@ -724,5 +733,87 @@ void calculateAndDisplayCost(int source, int dest, int weight, int vehicleType)
         deliveryCustomerCharge[deliveryCount] = customerCharge;
         deliveryEstimatedTime[deliveryCount] = estimatedTime;
         deliveryCount++;
+    }
+}
+
+void saveToFile()
+{
+    FILE* routesFile = fopen("routes.txt", "w");
+    if(routesFile != NULL)
+    {
+        fprintf(routesFile, "%d\n", cityCount);
+        for(int i = 0; i < cityCount; i++)
+        {
+            fprintf(routesFile, "%s\n", cities[i]);
+        }
+
+        for(int i = 0; i < cityCount; i++)
+        {
+            for(int j = 0; j < cityCount; j++)
+            {
+                fprintf(routesFile, "%d ", distances[i][j]);
+            }
+            fprintf(routesFile, "\n");
+        }
+        fclose(routesFile);
+    }
+
+    FILE* deliveriesFile = fopen("deliveries.txt", "w");
+    if(deliveriesFile != NULL)
+    {
+        fprintf(deliveriesFile, "%d\n", deliveryCount);
+        for(int i = 0; i < deliveryCount; i++)
+        {
+            fprintf(deliveriesFile, "%s|%s|%d|%d|%d|%.2f|%.2f|%.2f|%.2f|%.2f|%.2f\n",
+                    deliverySource[i], deliveryDest[i],
+                    deliveryDistance[i], deliveryWeight[i],
+                    deliveryVehicleType[i], deliveryBaseCost[i],
+                    deliveryFuelCost[i], deliveryTotalCost[i],
+                    deliveryProfit[i], deliveryCustomerCharge[i],
+                    deliveryEstimatedTime[i]);
+        }
+        fclose(deliveriesFile);
+    }
+}
+
+void loadFromFile()
+{
+    FILE* routesFile = fopen("routes.txt", "r");
+    if(routesFile != NULL)
+    {
+        fscanf(routesFile, "%d\n", &cityCount);
+        for(int i = 0; i < cityCount; i++)
+        {
+            fgets(cities[i], MAX_NAME_LENGTH, routesFile);
+            cities[i][strcspn(cities[i], "\n")] = 0;
+        }
+
+        for(int i = 0; i < cityCount; i++)
+        {
+            for(int j = 0; j < cityCount; j++)
+            {
+                fscanf(routesFile, "%d", &distances[i][j]);
+            }
+        }
+        fclose(routesFile);
+        printf("Routes data loaded successfully!\n");
+    }
+
+    FILE* deliveriesFile = fopen("deliveries.txt", "r");
+    if(deliveriesFile != NULL)
+    {
+        fscanf(deliveriesFile, "%d\n", &deliveryCount);
+        for(int i = 0; i < deliveryCount; i++)
+        {
+            fscanf(deliveriesFile, "%[^|]|%[^|]|%d|%d|%d|%f|%f|%f|%f|%f|%f\n",
+                   deliverySource[i], deliveryDest[i],
+                   &deliveryDistance[i], &deliveryWeight[i],
+                   &deliveryVehicleType[i], &deliveryBaseCost[i],
+                   &deliveryFuelCost[i], &deliveryTotalCost[i],
+                   &deliveryProfit[i], &deliveryCustomerCharge[i],
+                   &deliveryEstimatedTime[i]);
+        }
+        fclose(deliveriesFile);
+        printf("Delivery data loaded successfully!\n");
     }
 }

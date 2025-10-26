@@ -563,11 +563,6 @@ void findLeastCostRoute(int source, int dest, int weight, int vehicleType)
         }
     }
 
-    if(intermediateCount > 4)
-    {
-        intermediateCount = 4;
-    }
-
     for(int i = 0; i < intermediateCount; i++)
     {
         int mid = intermediateCities[i];
@@ -724,6 +719,7 @@ void findLeastCostRoute(int source, int dest, int weight, int vehicleType)
     float customerCharge = totalCost + profit;
     float estimatedTime = (float)D / S;
 
+    system("cls");
     printf("\n======================================================\n");
     printf("           DELIVERY COST ESTIMATION\n");
     printf("------------------------------------------------------\n");
@@ -784,6 +780,7 @@ void calculateAndDisplayCost(int source, int dest, int weight, int vehicleType)
     float customerCharge = totalCost + profit;
     float estimatedTime = (float)D / S;
 
+    system("cls");
     printf("\n======================================================\n");
     printf("           DELIVERY COST ESTIMATION\n");
     printf("------------------------------------------------------\n");
@@ -854,6 +851,7 @@ void performanceReports()
 
     float avgTime = totalTime / deliveryCount;
 
+    system("cls");
     printf("\n======================================================\n");
     printf("           PERFORMANCE REPORT\n");
     printf("======================================================\n");
